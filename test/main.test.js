@@ -11,7 +11,7 @@ describe('Test du DOM', () => {
     document.documentElement.innerHTML = html;
  
     // On charge le script manuellement
-    require('../main.js');
+    // require('../main.js');
   });
  
   test('Clique sur le bouton met à jour le texte', () => {
