@@ -1,0 +1,61 @@
+name: CI-CD-PIPELINE
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repository
+        uses: action/checkout@v4
+        with:
+          node-version: '22'
+
+      - name: install dependecies
+        run: npm install
+
+      - name: build project
+        run: npm run build
+
+  test:
+
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: checkout repository
+        uses: action/checkout@v4
+        with:
+          node-version: '22'
+      
+      - name: install dependecies
+        run: npm install
+
+      - name: run tests
+        run: npm run test
+
+  deploy:
+
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: checkout repository
+        uses: action/checkout@v4
+        with:
+          node-version: '22'
+      
+      - name: deploy web app
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.DEMO_CD }}
+          publish_dir: ./
